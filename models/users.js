@@ -1,16 +1,17 @@
-const Users = (sequelize, DataTypes) => {
-  const User = sequelize.define('Users', {
+/** Ref: https://sequelize.org/master/manual/validations-and-constraints.html  */
+const User = (sequelize, DataTypes) => {
+  const Users = sequelize.define('User', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    displayName: DataTypes.STRING,
-    email: DataTypes.STRING, // tem quer ser único
-    password: DataTypes.STRING,
+    displayName: { type: DataTypes.STRING, validate: { notEmpty: true, len: [8, 200] } },
+    email: { type: DataTypes.STRING, unique: true, validate: { notEmpty: true, isEmail: true } },
+    password: { type: DataTypes.STRING, validate: { notEmpty: true, len: [6, 6] } },
     image: DataTypes.STRING,
   }, {
     timestamps: false,
     tableName: 'Users',
   });
 
-  return User;
+  return Users;
 };
 
-module.exports = Users;
+module.exports = User;
