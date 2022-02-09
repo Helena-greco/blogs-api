@@ -1,3 +1,5 @@
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
 const displayNameReq = (req, res, next) => {
@@ -65,10 +67,36 @@ const passwordReq = (req, res, next) => {
   next();
 };
 
+const secret = process.env.JWT_SECRET;
+
+const tokenValid = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: 'Token not found' });
+    }
+
+    const decoded = jwt.verify(token, secret);
+    console.log(decoded);
+
+    const user = await User.findOne({ where: { email: decoded.data } });
+    console.log(user);
+
+    if (!user) {
+      return res.status(401).json({ message: 'User does not exist' });
+    }
+    req.user = user;
+  } catch (error) {
+    return res.status(401).send({ message: 'Expired or invalid token' });
+  }
+  next();
+};
+
 module.exports = {
   displayNameReq,
   validEmail,
   validPassword,
   emailReq,
   passwordReq,
+  tokenValid,
 };

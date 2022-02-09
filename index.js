@@ -1,7 +1,7 @@
 const express = require('express');
 const userController = require('./controller/userController');
 const loginController = require('./controller/loginController');
-const validation = require('./validations/userValidation');
+const validation = require('./validations/validation');
 
 const app = express();
 
@@ -17,6 +17,10 @@ app.post('/login',
   validation.validPassword,
   validation.validEmail,
   loginController.loginToken);
+
+app.get('/user', 
+  validation.tokenValid,
+  userController.getAllUsers);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 
