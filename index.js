@@ -33,6 +33,10 @@ app.post('/categories',
   validation.tokenValid,
   catController.createCategory);
 
+app.get('/categories',
+  validation.tokenValid,
+  catController.getAllCategories);
+
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 
 // não remova esse endpoint, e para o avaliador funcionar
