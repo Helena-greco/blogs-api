@@ -77,10 +77,7 @@ const tokenValid = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, secret);
-    console.log(decoded);
-
     const user = await User.findOne({ where: { email: decoded.data } });
-    console.log(user);
 
     if (!user) {
       return res.status(401).json({ message: 'User does not exist' });
