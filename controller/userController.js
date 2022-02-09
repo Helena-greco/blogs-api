@@ -15,7 +15,7 @@ const createUser = async (req, res) => {
       algorithm: 'HS256',
     };
 
-    const token = jwt.sign({ username: displayName }, secret, jwtConfig);
+    const token = jwt.sign({ data: displayName }, secret, jwtConfig);
 
     return res.status(201).json({ token });
   } catch (error) {
