@@ -1,14 +1,22 @@
 require('dotenv').config();
-const { BlogPost } = require('../models');
+const { BlogPost, PostsCategory } = require('../models');
 
 const createBlogs = async (req, res) => {
   try {
-    const { title, content } = req.body;
     const { id } = req.user;
+    const { title, content, categoryIds } = req.body;
 
-    const blogPosts = await BlogPost.create({ userId: id, title, content });
+    const post = await BlogPost.create({ title, content, userId: id });
 
-    return res.status(201).json(blogPosts);
+    const postId = post.id;
+
+    const categories = categoryIds.map(async (categoryId) => {
+        await PostsCategory.create({ postId, categoryId });
+    });
+
+    await Promise.all(categories);
+
+    return res.status(201).json(post);
   } catch (error) {
     return res.status(400).send({ error: error.message });
   }
