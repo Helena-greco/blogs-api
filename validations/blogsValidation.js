@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { Category } = require('../models');
 
 const textReq = (req, res, next) => {
   const { title, content } = req.body;
@@ -15,13 +14,6 @@ const validCategory = async (req, res, next) => {
     const { categoryIds } = req.body;
 
     if (!categoryIds) return res.status(400).send({ message: '"categoryIds" is required' });
-
-    categoryIds.forEach(async (id) => {
-      const category = await Category.findByPk(id);
-      if (!category) {
-        return res.status(400).send({ message: '"categoryIds" not found' });
-      }
-    });
 
     next();
   } catch (error) {
