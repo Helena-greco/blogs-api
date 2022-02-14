@@ -83,10 +83,10 @@ const tokenValid = async (req, res, next) => {
       return res.status(401).json({ message: 'User does not exist' });
     }
     req.user = user;
+    next();
   } catch (error) {
     return res.status(401).send({ message: 'Expired or invalid token' });
   }
-  next();
 };
 
 module.exports = {

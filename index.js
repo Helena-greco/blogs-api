@@ -4,6 +4,8 @@ const loginController = require('./controller/loginController');
 const validation = require('./validations/validation');
 const catValidation = require('./validations/categoriesValidation');
 const catController = require('./controller/categoriesController');
+const blogValidation = require('./validations/blogsValidation');
+const blogController = require('./controller/blogController');
 
 const app = express();
 
@@ -36,6 +38,12 @@ app.post('/categories',
 app.get('/categories',
   validation.tokenValid,
   catController.getAllCategories);
+
+app.post('/post',
+  blogValidation.textReq,
+  blogValidation.validCategory,
+  validation.tokenValid,
+  blogController.createBlogs);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 
